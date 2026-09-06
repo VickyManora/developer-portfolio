@@ -1,0 +1,70 @@
+{
+  "name": "vicky-manora-portfolio",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "prestart": "node tools/generate-build-info.mjs",
+    "start": "ng serve",
+    "prebuild": "node tools/generate-build-info.mjs",
+    "build": "ng build",
+    "postbuild": "node tools/generate-404.mjs && node tools/apply-csp.mjs && node tools/generate-sitemap.mjs",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "lint": "ng lint",
+    "lint:fix": "ng lint --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit",
+    "preview": "npx --yes http-server dist/portfolio/browser -p 4300 -c-1",
+    "lighthouse": "lhci autorun",
+    "verify": "npm run lint && npm run typecheck && npm run build"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true,
+    "overrides": [
+      {
+        "files": "*.html",
+        "options": {
+          "parser": "angular"
+        }
+      }
+    ]
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/common": "^20.3.0",
+    "@angular/compiler": "^20.3.0",
+    "@angular/core": "^20.3.0",
+    "@angular/forms": "^20.3.0",
+    "@angular/platform-browser": "^20.3.0",
+    "@angular/platform-server": "^20.3.0",
+    "@angular/router": "^20.3.0",
+    "@angular/ssr": "^20.3.36",
+    "gsap": "^3.15.0",
+    "rxjs": "~7.8.0",
+    "three": "^0.185.1",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^20.3.36",
+    "@angular/cli": "^20.3.36",
+    "@angular/compiler-cli": "^20.3.0",
+    "@lhci/cli": "^0.15.1",
+    "@types/jasmine": "~5.1.0",
+    "@types/node": "^20.17.19",
+    "@types/three": "^0.185.4",
+    "angular-eslint": "20.7.0",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "jasmine-core": "~5.9.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "prettier": "^3.9.6",
+    "typescript": "~5.9.2",
+    "typescript-eslint": "8.46.4"
+  }
+}

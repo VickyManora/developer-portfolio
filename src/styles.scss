@@ -1,0 +1,65 @@
+// ---------------------------------------------------------------------------
+// Global stylesheet. Order matters: tokens and themes must resolve before
+// anything consumes the custom properties they declare.
+// ---------------------------------------------------------------------------
+@use 'styles/tokens';
+@use 'styles/fonts';
+@use 'styles/themes';
+@use 'styles/typography';
+@use 'styles/reset';
+@use 'styles/motion';
+@use 'styles/layout';
+@use 'styles/ui';
+@use 'styles/reveal';
+
+html {
+  // Painted before any JS runs, so a dark-first site never flashes white.
+  background-color: var(--bg-void);
+}
+
+body {
+  min-height: 100dvh;
+  // No background-color here on purpose: html paints the ground colour, and an
+  // opaque background on body would paint over the z-index:-1 grid below.
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+// Page-level technical ground. A very low-contrast grid over the void colour,
+// masked to fade toward the viewport edges so it never reads as graph paper.
+// Fixed attachment so it behaves as a ground plane rather than scrolling wallpaper.
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(120% 90% at 50% 0%, #000 0%, transparent 78%);
+}
+
+:root[data-theme='light'] body::before {
+  background-image:
+    linear-gradient(to right, rgba(8, 9, 12, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(8, 9, 12, 0.045) 1px, transparent 1px);
+}
+
+// Focus is never removed — only replaced with a consistent, visible ring.
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection {
+  background-color: var(--accent-soft);
+  color: var(--text-primary);
+}

@@ -1,0 +1,82 @@
+// ---------------------------------------------------------------------------
+// Theme definitions.
+//
+// Dark is the default and is declared on bare :root so the page paints dark
+// with no JavaScript and no flash — the ThemeService only ever *overrides*.
+// `data-theme` on <html> is set by ThemeService for an explicit user choice.
+// ---------------------------------------------------------------------------
+
+@mixin dark-tokens {
+  color-scheme: dark;
+
+  --bg-void: #08090c;
+  --bg-surface: #0e1015;
+  --bg-raised: #14171e;
+
+  --line-hairline: rgba(255, 255, 255, 0.07);
+  --line-strong: rgba(255, 255, 255, 0.14);
+
+  --text-primary: #edeff3; // 17.9:1 on --bg-void
+  --text-secondary: #9aa1ae; //  7.7:1 on --bg-void
+  // The approved palette specifies #5E6673 here. Measured against --bg-void it
+  // is 3.4:1 — below the 4.5:1 AA minimum for normal text, and this token is
+  // used for 12px monospace metadata. Text therefore uses #7A828F (5.1:1), and
+  // the specified value is kept as --ink-muted for NON-TEXT decoration (rules,
+  // tick marks, dividers), where contrast minimums do not apply.
+  --text-tertiary: #7a828f; //  5.1:1 on --bg-void
+  --ink-muted: #5e6673; // decorative only — never for text
+
+  --accent: #4d8dff; //  6.2:1 on --bg-void
+  --accent-2: #5ee9d0;
+  --accent-warm: #ffb86b; // 11.7:1 on --bg-void
+  --accent-soft: rgba(77, 141, 255, 0.12);
+
+  --focus-ring: #5ee9d0;
+
+  --state-error: #ff8a8a;
+  --state-success: #5ee9d0;
+
+  --scrim: rgba(8, 9, 12, 0.72);
+}
+
+@mixin light-tokens {
+  color-scheme: light;
+
+  --bg-void: #f7f8fa;
+  --bg-surface: #ffffff;
+  --bg-raised: #f0f2f5;
+
+  --line-hairline: rgba(8, 9, 12, 0.1);
+  --line-strong: rgba(8, 9, 12, 0.2);
+
+  --text-primary: #0e1015; // 17.4:1 on --bg-void
+  --text-secondary: #4a515c; //  8.2:1 on --bg-void
+  --text-tertiary: #656d79; //  5.4:1 on --bg-void
+  --ink-muted: #98a0ac; // decorative only — never for text
+
+  --accent: #1d4ed8; //  7.6:1 on --bg-void
+  --accent-2: #0e9384;
+  --accent-warm: #b45309; //  4.9:1 on --bg-void
+  --accent-soft: rgba(29, 78, 216, 0.1);
+
+  --focus-ring: #1d4ed8;
+
+  --state-error: #b42318;
+  --state-success: #0e9384;
+
+  --scrim: rgba(247, 248, 250, 0.78);
+}
+
+// Default: dark, with no JS required.
+:root {
+  @include dark-tokens;
+}
+
+// Explicit user choice wins in both directions.
+:root[data-theme='light'] {
+  @include light-tokens;
+}
+
+:root[data-theme='dark'] {
+  @include dark-tokens;
+}

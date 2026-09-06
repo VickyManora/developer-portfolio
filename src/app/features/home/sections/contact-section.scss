@@ -1,0 +1,109 @@
+@use 'mixins' as m;
+@use 'surfaces' as s;
+
+.contact {
+  display: grid;
+  gap: 36px;
+
+  @include m.respond-to('md') {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: 64px;
+    align-items: start;
+  }
+}
+
+.contact__lead {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.contact__pitch {
+  max-width: 32ch;
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+  color: var(--text-primary);
+  text-wrap: balance;
+}
+
+.contact__where {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-label);
+  letter-spacing: var(--tracking-mono);
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.contact__dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background-color: var(--ink-muted);
+}
+
+// --- Primary actions --------------------------------------------------------
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.action {
+  @include s.card;
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr) 20px;
+  align-items: center;
+  gap: 14px;
+  min-height: 64px;
+  padding: 0 18px;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition:
+    border-color var(--dur-2) var(--ease-standard),
+    background-color var(--dur-2) var(--ease-standard);
+
+  &:hover {
+    border-color: var(--line-strong);
+    background-color: var(--bg-raised);
+
+    .action__glyph {
+      color: var(--accent);
+    }
+  }
+}
+
+.action--primary {
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  background-color: var(--accent-soft);
+}
+
+.action__label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-label);
+  letter-spacing: var(--tracking-mono);
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.action__value {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--fs-sm);
+}
+
+.action__glyph {
+  justify-self: end;
+  color: var(--text-tertiary);
+  transition: color var(--dur-2) var(--ease-standard);
+}

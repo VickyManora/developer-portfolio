@@ -1,0 +1,105 @@
+<header class="header" [class.is-compact]="compact()">
+  <div class="header__inner">
+    <a class="header__brand" routerLink="/" (click)="closeMenu()">
+      <span class="header__mark" aria-hidden="true"></span>
+      <span class="header__name">Vicky Manora</span>
+    </a>
+
+    <nav class="header__nav" aria-label="Main">
+      <ul class="header__list" role="list">
+        @for (section of sections; track section.id) {
+          <li>
+            <a
+              class="header__link"
+              [class.header__link--active]="activeId() === section.id"
+              [routerLink]="['/']"
+              [fragment]="section.id"
+              [attr.aria-current]="activeId() === section.id ? 'true' : null"
+              >{{ section.navLabel }}</a
+            >
+          </li>
+        }
+      </ul>
+    </nav>
+
+    <div class="header__actions">
+      <a
+        class="header__icon-link"
+        [href]="contact.github"
+        rel="me noopener"
+        target="_blank"
+        aria-label="GitHub profile (opens in a new tab)"
+      >
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
+          <path
+            fill="currentColor"
+            d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.4 7.4 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"
+          />
+        </svg>
+      </a>
+
+      <a
+        class="header__icon-link"
+        [href]="contact.linkedin"
+        rel="me noopener"
+        target="_blank"
+        aria-label="LinkedIn profile (opens in a new tab)"
+      >
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
+          <path
+            fill="currentColor"
+            d="M3.6 5.3H.7V15h2.9V5.3ZM2.15 1A1.68 1.68 0 0 0 .4 2.66c0 .92.72 1.66 1.7 1.66h.02A1.68 1.68 0 0 0 3.87 2.66 1.67 1.67 0 0 0 2.15 1ZM15.3 9.44c0-2.7-1.44-3.96-3.36-3.96a2.9 2.9 0 0 0-2.63 1.46V5.3H6.4c.04.82 0 9.7 0 9.7h2.91V9.58c0-.26.02-.52.1-.7.2-.52.68-1.06 1.48-1.06 1.05 0 1.47.8 1.47 1.96V15h2.92V9.44Z"
+          />
+        </svg>
+      </a>
+
+      <button
+        type="button"
+        class="btn btn--sm header__command"
+        aria-keyshortcuts="Meta+K Control+K"
+        aria-label="Open command palette"
+        (click)="openCommands()"
+      >
+        <span aria-hidden="true">Search</span>
+        <kbd class="header__kbd" aria-hidden="true">⌘K</kbd>
+      </button>
+
+      <button
+        type="button"
+        class="meta header__pref"
+        [attr.aria-pressed]="reducedMotion()"
+        (click)="toggleMotion()"
+      >
+        Motion
+        <span class="header__pref-state">{{ reducedMotion() ? 'off' : 'on' }}</span>
+      </button>
+
+
+      <a class="btn btn--primary btn--sm header__cta" [href]="contact.resumeFile" download>
+        Résumé<span aria-hidden="true">↓</span>
+      </a>
+
+      <button
+        type="button"
+        class="header__burger"
+        [attr.aria-expanded]="menuOpen()"
+        aria-controls="mobile-menu"
+        aria-label="Open navigation menu"
+        (click)="openMenu($event)"
+      >
+        <span class="header__burger-bar" aria-hidden="true"></span>
+        <span class="header__burger-bar" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- 2px scroll indicator. Decorative: the same information is available via
+       the rail's percentage and the aria-current section link. -->
+  <div class="header__progress" aria-hidden="true">
+    <span class="header__progress-fill" [style.width]="progressWidth()"></span>
+  </div>
+</header>
+
+@if (menuOpen()) {
+  <app-mobile-menu [activeId]="activeId()" (closed)="closeMenu()" />
+}

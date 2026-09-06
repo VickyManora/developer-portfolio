@@ -1,0 +1,72 @@
+<section class="section" id="skills" appObservedSection aria-labelledby="skills-heading">
+  <div class="container">
+    <app-section-header
+      appReveal
+      index="04"
+      label="Technical Skills"
+      heading="Tech arsenal"
+      headingId="skills-heading"
+      lede="The frontend core I lead with, and the supporting stack around it. Grouping is editorial — it reflects how the work is organised, not a formal classification or ranking."
+    />
+
+    <!-- Primary expertise -->
+    <div class="arsenal" appReveal>
+      <p class="eyebrow arsenal__label">Primary expertise</p>
+      <ul class="arsenal__list" role="list">
+        @for (skill of primary; track skill.id) {
+          <li>
+            <button
+              type="button"
+              class="tech tech--primary"
+              [class.is-active]="isActive(skill.id)"
+              [attr.aria-pressed]="isPinned(skill.id)"
+              (mouseenter)="preview(skill.id)"
+              (mouseleave)="preview(null)"
+              (focus)="preview(skill.id)"
+              (blur)="preview(null)"
+              (click)="toggle(skill.id)"
+            >
+              <span class="tech__dot" aria-hidden="true"></span>
+              {{ skill.name }}
+            </button>
+          </li>
+        }
+      </ul>
+    </div>
+
+    <!-- Supporting stack, grouped by role. Primary technologies are omitted
+         here — they are featured above and would otherwise appear twice. -->
+    <div class="layers" appRevealGroup=".layer">
+      @for (group of groups; track group.label) {
+        <div class="layer" [class.is-lit]="false">
+          <div class="layer__label">
+            <span class="layer__depth" aria-hidden="true">L{{ group.depth }}</span>
+            <h3 class="layer__name">{{ group.label }}</h3>
+          </div>
+
+          <ul class="layer__skills" role="list">
+            @for (skill of group.skills; track skill.id) {
+              <li>
+                <button
+                  type="button"
+                  class="tech"
+                  [class.is-active]="isActive(skill.id)"
+                  [class.is-graph]="skill.inGraph"
+                  [attr.aria-pressed]="isPinned(skill.id)"
+                  (mouseenter)="preview(skill.id)"
+                  (mouseleave)="preview(null)"
+                  (focus)="preview(skill.id)"
+                  (blur)="preview(null)"
+                  (click)="toggle(skill.id)"
+                >
+                  <span class="tech__dot" aria-hidden="true"></span>
+                  {{ skill.name }}
+                </button>
+              </li>
+            }
+          </ul>
+        </div>
+      }
+    </div>
+  </div>
+</section>

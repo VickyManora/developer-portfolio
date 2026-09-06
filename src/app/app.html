@@ -1,0 +1,15 @@
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<app-header />
+
+<main id="main-content" tabindex="-1">
+  <router-outlet />
+</main>
+
+<app-footer />
+
+<app-command-palette-host />
+
+<!-- Politely announces client-side navigations to screen readers, which would
+     otherwise hear nothing when the view changes without a page load. -->
+<div id="route-announcer" class="visually-hidden" role="status" aria-live="polite"></div>

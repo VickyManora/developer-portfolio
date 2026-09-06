@@ -1,0 +1,98 @@
+@use 'sass:map';
+
+// ---------------------------------------------------------------------------
+// Design tokens — Phase 1 foundation
+//
+// Palette is dark-first per the locked visual direction. Every colour pairing
+// used for text has a documented contrast ratio against its own surface; see
+// the comments below. Light ("Blueprint") theme lives in _themes.scss.
+// ---------------------------------------------------------------------------
+
+// Breakpoints ---------------------------------------------------------------
+$breakpoints: (
+  'sm': 640px,
+  'md': 900px,
+  'lg': 1200px,
+  'xl': 1600px,
+);
+
+// Layout --------------------------------------------------------------------
+$container-max: 1240px;
+$container-narrow: 760px;
+$gutter-mobile: 20px;
+$gutter-desktop: 40px;
+
+// Spacing scale (4px base) --------------------------------------------------
+$space: (
+  '0': 0,
+  '1': 4px,
+  '2': 8px,
+  '3': 12px,
+  '4': 16px,
+  '5': 24px,
+  '6': 32px,
+  '7': 48px,
+  '8': 64px,
+  '9': 96px,
+  '10': 128px,
+  '11': 160px,
+);
+
+@function space($key) {
+  @return map.get($space, $key);
+}
+
+// Radii ---------------------------------------------------------------------
+$radius-chip: 6px;
+$radius-card: 12px;
+$radius-panel: 16px;
+
+// Z-index ladder ------------------------------------------------------------
+$z: (
+  'canvas': 0,
+  'content': 10,
+  'rail': 20,
+  'header': 30,
+  'menu': 40,
+  'dialog': 50,
+  'skip-link': 60,
+);
+
+@function z($key) {
+  @return map.get($z, $key);
+}
+
+:root {
+  // Global surfaces are defined per-theme in _themes.scss. Everything here is
+  // theme-independent.
+
+  // Signal gradient (accent) — used for small elements only. The "neon rule":
+  // saturated accent only below 24px or under 2px thick.
+  --accent-gradient: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+
+  // Motion tokens -----------------------------------------------------------
+  --dur-1: 120ms;
+  --dur-2: 200ms;
+  --dur-3: 320ms;
+  --dur-4: 560ms;
+  --dur-5: 900ms;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  // Layout ------------------------------------------------------------------
+  --container-max: #{$container-max};
+  --container-narrow: #{$container-narrow};
+  --gutter: #{$gutter-mobile};
+  --header-height: 60px;
+
+  --radius-chip: #{$radius-chip};
+  --radius-card: #{$radius-card};
+  --radius-panel: #{$radius-panel};
+
+  @media (min-width: map.get($breakpoints, 'md')) {
+    --gutter: #{$gutter-desktop};
+    --header-height: 72px;
+  }
+}

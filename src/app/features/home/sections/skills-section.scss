@@ -1,0 +1,161 @@
+@use 'mixins' as m;
+@use 'surfaces' as s;
+
+// --- Primary expertise ------------------------------------------------------
+
+.arsenal {
+  display: grid;
+  gap: 14px;
+  padding-bottom: clamp(28px, 4vw, 44px);
+  margin-bottom: clamp(24px, 3vw, 36px);
+  border-bottom: 1px solid var(--line-hairline);
+
+  @include m.respond-to('md') {
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 32px;
+    align-items: start;
+  }
+}
+
+.arsenal__label {
+  margin: 0;
+  padding-top: 6px;
+}
+
+.arsenal__list,
+.layer__skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// --- Supporting layers ------------------------------------------------------
+
+.layers {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line-hairline);
+}
+
+.layer {
+  display: grid;
+  gap: 14px;
+  padding-block: 22px;
+  border-bottom: 1px solid var(--line-hairline);
+
+  @include m.respond-to('md') {
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 32px;
+    align-items: start;
+  }
+}
+
+.layer__label {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+// The stratum index, echoing the depth ordering the 3D scene uses.
+.layer__depth {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-label);
+  letter-spacing: var(--tracking-mono);
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.layer__name {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-label);
+  font-weight: 400;
+  letter-spacing: var(--tracking-mono);
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+// --- Technology button ------------------------------------------------------
+//
+// A real button: hover and focus preview, click and Enter/Space pin. The
+// border and background carry the state; nothing resizes, so activating a
+// technology cannot shift layout.
+
+.tech {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  // 44px targets on touch; tighter on precise pointers where the grid would
+  // otherwise become enormous.
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--line-hairline);
+  border-radius: var(--radius-chip);
+  background-color: var(--bg-raised);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-align: left;
+  transition:
+    border-color var(--dur-2) var(--ease-standard),
+    background-color var(--dur-2) var(--ease-standard),
+    color var(--dur-2) var(--ease-standard);
+
+  @media (pointer: fine) {
+    min-height: 32px;
+  }
+
+  &:hover {
+    color: var(--text-primary);
+    border-color: var(--line-strong);
+  }
+}
+
+.tech__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--ink-muted);
+  transition: background-color var(--dur-2) var(--ease-standard);
+}
+
+// Primary reads heavier: display face, larger, brighter.
+.tech--primary {
+  padding: 0 14px;
+  min-height: 44px;
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  background-color: var(--bg-surface);
+
+  .tech__dot {
+    background-image: var(--accent-gradient);
+  }
+}
+
+// Marks a technology that also appears as an anchor in the 3D graph.
+.tech.is-graph .tech__dot {
+  background-color: color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+// The active state: previewed by hover/focus, or pinned by click/Enter.
+.tech.is-active {
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  background-color: var(--accent-soft);
+  color: var(--text-primary);
+
+  .tech__dot {
+    background-image: none;
+    background-color: var(--accent-warm);
+  }
+}
+
+// A pinned technology keeps a persistent marker so the state is legible
+// without hovering.
+.tech[aria-pressed='true'] {
+  border-color: color-mix(in srgb, var(--accent-warm) 60%, transparent);
+}

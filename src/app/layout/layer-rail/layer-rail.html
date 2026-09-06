@@ -1,0 +1,27 @@
+<nav class="rail" aria-label="Page sections">
+  <p class="rail__meta" aria-hidden="true">{{ progressPercent() }}</p>
+
+  <!-- Decorative readout. The same information is carried accessibly by
+       aria-current on the active section link below. -->
+  <div class="rail__track" aria-hidden="true">
+    <span class="rail__fill" [style.transform]="'scaleY(' + progressRatio() + ')'"></span>
+  </div>
+
+  <ul class="rail__list" role="list">
+    @for (section of sections; track section.id) {
+      <li>
+        <a
+          class="rail__link"
+          [class.rail__link--active]="activeId() === section.id"
+          [routerLink]="['/']"
+          [fragment]="section.id"
+          [attr.aria-current]="activeId() === section.id ? 'true' : null"
+        >
+          <span class="rail__tick" aria-hidden="true"></span>
+          <span class="rail__index">{{ section.index }}</span>
+          <span class="rail__label">{{ section.label }}</span>
+        </a>
+      </li>
+    }
+  </ul>
+</nav>

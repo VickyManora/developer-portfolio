@@ -1,0 +1,124 @@
+@if (view(); as data) {
+  <article class="case">
+    <app-system-backdrop />
+
+    <div class="case__inner">
+      <a class="btn btn--ghost btn--sm case__back" routerLink="/" fragment="work">
+        <span aria-hidden="true">←</span> Back to work
+      </a>
+
+      <header class="case__header">
+        <p class="eyebrow">
+          <span class="eyebrow__index">{{ data.study.eyebrow }}</span>
+        </p>
+        <h1 class="case__title">{{ data.name }}</h1>
+        <p class="case__positioning">{{ data.study.positioning }}</p>
+
+        <dl class="case__meta">
+          <div>
+            <dt class="meta">Period</dt>
+            <dd><time [attr.datetime]="data.project.start">{{ data.range }}</time></dd>
+          </div>
+          <div>
+            <dt class="meta">Role</dt>
+            <dd>{{ data.project.roleContext }}</dd>
+          </div>
+          <div>
+            <dt class="meta">Domain</dt>
+            <dd>{{ data.project.domain }}</dd>
+          </div>
+          <div>
+            <dt class="meta">Client</dt>
+            <dd>{{ data.client }}</dd>
+          </div>
+        </dl>
+
+        @if (data.hardMetrics.length > 0) {
+          <ul class="case__headline-metrics" role="list">
+            @for (metric of data.hardMetrics; track metric.label) {
+              <li><app-stat-block [value]="metric.value" [label]="metric.label" /></li>
+            }
+          </ul>
+        }
+      </header>
+
+      @for (item of data.sections; track item.section.id) {
+        <section class="case__section" [attr.aria-labelledby]="'cs-' + item.section.id" appReveal>
+          <div class="case__section-head">
+            <p class="eyebrow">
+              <span class="eyebrow__index">{{ item.section.index }}</span>
+              <span class="eyebrow__divider" aria-hidden="true">/</span>
+              <span>{{ item.section.title }}</span>
+            </p>
+            <h2 class="case__section-title" [id]="'cs-' + item.section.id">
+              {{ item.section.title }}
+            </h2>
+          </div>
+
+          <div class="case__section-body">
+            @if (item.section.confidence === 'needs-input') {
+              <app-pending-note [field]="item.section.missing ?? item.section.title" />
+            } @else {
+              @if (item.section.body) {
+                <p class="case__prose">{{ item.section.body }}</p>
+              }
+
+              @if (item.metrics.length > 0) {
+                <ul class="case__metrics" role="list">
+                  @for (metric of item.metrics; track metric.label) {
+                    <li><app-stat-block [value]="metric.value" [label]="metric.label" /></li>
+                  }
+                </ul>
+              }
+
+              @if (item.section.groups) {
+                <div class="case__groups">
+                  @for (group of item.section.groups; track group.label) {
+                    <div class="case__group">
+                      <h3 class="meta case__group-label">{{ group.label }}</h3>
+                      <ul class="case__bullets" role="list">
+                        @for (bullet of group.bullets; track bullet) {
+                          <li>{{ bullet }}</li>
+                        }
+                      </ul>
+                    </div>
+                  }
+                </div>
+              }
+
+              @if (item.section.conceptMap) {
+                <app-concept-map [groups]="item.section.conceptMap" />
+              }
+
+              @if (item.section.showStack) {
+                @if (data.stack; as stack) {
+                  <ul class="case__stack" role="list">
+                    @for (tech of stack; track tech) {
+                      <li><app-tag-chip>{{ tech }}</app-tag-chip></li>
+                    }
+                  </ul>
+                } @else {
+                  <app-pending-note field="Technology stack for this project" />
+                }
+              }
+            }
+          </div>
+        </section>
+      }
+
+      <nav class="case__footer" aria-label="Case study">
+        <a class="btn" routerLink="/" fragment="work">
+          <span aria-hidden="true">←</span> All work
+        </a>
+        <a class="btn btn--primary" routerLink="/" fragment="contact">Get in touch</a>
+      </nav>
+    </div>
+  </article>
+} @else {
+  <div class="container container--narrow case__missing">
+    <p class="meta">Error 404</p>
+    <h1 class="u-h2">Case study not found</h1>
+    <p class="u-lede">No case study exists at this address.</p>
+    <p><a class="btn btn--primary" routerLink="/">Return to the homepage</a></p>
+  </div>
+}

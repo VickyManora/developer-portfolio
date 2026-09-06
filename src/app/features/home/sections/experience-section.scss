@@ -1,0 +1,198 @@
+@use 'mixins' as m;
+
+.timeline-wrap {
+  position: relative;
+}
+
+// Static spine: the full-length hairline the reader sees from the start.
+.timeline__spine,
+.timeline__spine-active {
+  position: absolute;
+  top: 12px;
+  bottom: 12px;
+  left: 9px;
+  width: 1px;
+  pointer-events: none;
+}
+
+.timeline__spine {
+  background-color: var(--line-hairline);
+}
+
+// Scrubbed overlay: fills as the reader descends. scaleY only.
+.timeline__spine-active {
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--accent) 55%, transparent),
+    color-mix(in srgb, var(--accent-2) 45%, transparent)
+  );
+  transform-origin: top center;
+  transform: scaleY(0);
+}
+
+// Reduced motion: the spine is simply drawn, no fill animation.
+@media (prefers-reduced-motion: reduce) {
+  .timeline__spine-active {
+    transform: scaleY(1);
+  }
+}
+
+:root[data-motion='reduced'] .timeline__spine-active {
+  transform: scaleY(1);
+}
+
+.timeline {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline__item {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  gap: 20px;
+  padding-bottom: clamp(32px, 4vw, 52px);
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+
+  @include m.respond-to('md') {
+    gap: 28px;
+  }
+}
+
+.timeline__rail {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+// A node on the system spine, not a bullet point. It starts muted and takes
+// the signal gradient once the role reaches the reading band.
+.timeline__node {
+  position: relative;
+  z-index: 1;
+  width: 9px;
+  height: 9px;
+  margin-top: 7px;
+  border-radius: 2px;
+  background-color: var(--ink-muted);
+  background-image: none;
+  transition:
+    background-color var(--dur-3) var(--ease-standard),
+    box-shadow var(--dur-3) var(--ease-standard);
+}
+
+.timeline__item.is-active .timeline__node {
+  background-image: var(--accent-gradient);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+// Vodafone Idea: the resume carries no content for it. Restraint is expressed
+// structurally — a hollow node and no project list — never by dimming text,
+// which would push it under the contrast minimum.
+.timeline__item.is-minimal .timeline__node {
+  background-image: none;
+  background-color: transparent;
+  border: 1px solid var(--ink-muted);
+  box-shadow: none;
+}
+
+.timeline__item.is-minimal.is-active .timeline__node {
+  border-color: var(--text-tertiary);
+  background-image: none;
+}
+
+.timeline__body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.timeline__meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.timeline__dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background-color: var(--ink-muted);
+}
+
+.timeline__company {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  letter-spacing: var(--tracking-heading);
+}
+
+.timeline__title {
+  color: var(--text-secondary);
+  font-size: var(--fs-body);
+}
+
+.timeline__projects {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text-secondary);
+  font-size: var(--fs-sm);
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+.timeline__project-tick {
+  flex: none;
+  width: 12px;
+  height: 1px;
+  background-color: var(--ink-muted);
+  transition: background-color var(--dur-3) var(--ease-standard);
+}
+
+.timeline__item.is-active .timeline__project-tick {
+  background-color: var(--text-tertiary);
+}
+
+// Only deep-tier projects link out; the rest are plain labels.
+.timeline__project-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color var(--dur-2) var(--ease-standard);
+
+  &:hover {
+    color: var(--text-primary);
+
+    .timeline__project-arrow {
+      transform: translateX(3px);
+    }
+  }
+}
+
+.timeline__project-arrow {
+  color: var(--accent);
+  font-size: var(--fs-xs);
+  transition: transform var(--dur-2) var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timeline__project-link:hover .timeline__project-arrow {
+    transform: none;
+  }
+}

@@ -1,0 +1,119 @@
+@use 'mixins' as m;
+
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: calc(100dvh - var(--header-height));
+  padding-block: clamp(56px, 11vh, 128px);
+  overflow: hidden;
+}
+
+.hero__inner {
+  @include m.container;
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  max-width: min(100%, 1000px);
+}
+
+.hero__eyebrow {
+  margin: 0;
+}
+
+.hero__name {
+  margin: 0;
+  // Room for the settle travel, so descenders are never clipped mid-flight.
+  padding-bottom: 0.08em;
+  font-family: var(--font-display);
+  font-size: var(--fs-hero);
+  font-weight: 600;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-display);
+}
+
+.hero__line {
+  max-width: 46ch;
+  font-size: var(--fs-body-lg);
+  line-height: 1.6;
+  color: var(--text-secondary);
+  text-wrap: pretty;
+}
+
+// Clip wrapper for the line reveal. `overflow: hidden` on the wrapper plus a
+// transform on the inner span — no layout property is animated.
+.hero__line-clip {
+  display: block;
+  overflow: hidden;
+  // Matches the animation travel so no descender is clipped at rest.
+  padding-bottom: 0.06em;
+}
+
+.hero__line-inner {
+  display: block;
+}
+
+.hero__chips,
+.hero__social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.hero__social {
+  gap: 20px;
+  margin-top: 4px;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+
+    &:hover {
+      color: var(--text-primary);
+    }
+  }
+}
+
+.hero__scroll {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  z-index: 10;
+  display: none;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-label);
+  letter-spacing: var(--tracking-mono);
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+
+  @include m.respond-to('md') {
+    display: flex;
+  }
+}
+
+.hero__scroll-rule {
+  display: block;
+  width: 32px;
+  height: 1px;
+  background-color: var(--ink-muted);
+}

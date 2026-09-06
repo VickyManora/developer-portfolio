@@ -1,0 +1,216 @@
+@use 'mixins' as m;
+@use 'surfaces' as s;
+
+.case {
+  position: relative;
+  padding-block: clamp(24px, 4vw, 48px) clamp(64px, 10vw, 120px);
+}
+
+// The static composition only — no WebGL on a text page.
+app-system-backdrop {
+  opacity: 0.5;
+}
+
+.case__inner {
+  @include m.container(920px);
+  position: relative;
+  z-index: 1;
+}
+
+.case__back {
+  margin-bottom: 24px;
+  padding-inline: 0;
+}
+
+// --- Header -----------------------------------------------------------------
+
+.case__header {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding-bottom: clamp(32px, 5vw, 56px);
+}
+
+.case__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-h1);
+  font-weight: 600;
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+  text-wrap: balance;
+}
+
+.case__positioning {
+  max-width: 62ch;
+  font-size: var(--fs-body-lg);
+  line-height: 1.65;
+  color: var(--text-secondary);
+  text-wrap: pretty;
+}
+
+.case__meta {
+  display: grid;
+  gap: 1px;
+  margin: 12px 0 0;
+  background-color: var(--line-hairline);
+  border-block: 1px solid var(--line-hairline);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr));
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 14px 0;
+    background-color: var(--bg-void);
+
+    @include m.respond-to('sm') {
+      padding: 14px 16px 14px 0;
+    }
+  }
+
+  dt {
+    margin: 0;
+  }
+
+  dd {
+    margin: 0;
+    font-size: var(--fs-sm);
+    color: var(--text-primary);
+  }
+}
+
+.case__headline-metrics,
+.case__metrics {
+  display: grid;
+  gap: 12px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
+
+  > li {
+    display: flex;
+  }
+}
+
+// --- Sections ---------------------------------------------------------------
+
+.case__section {
+  display: grid;
+  gap: 20px;
+  padding-block: clamp(32px, 4.5vw, 52px);
+  border-top: 1px solid var(--line-hairline);
+
+  @include m.respond-to('md') {
+    grid-template-columns: 190px minmax(0, 1fr);
+    gap: 40px;
+    align-items: start;
+  }
+}
+
+.case__section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.case__section-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  letter-spacing: var(--tracking-heading);
+
+  // On desktop the eyebrow carries the label, so the heading would repeat it.
+  // Kept in the DOM for heading structure, hidden from sighted users only.
+  @include m.respond-to('md') {
+    @include m.visually-hidden;
+  }
+}
+
+.case__section-body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+.case__prose {
+  max-width: 68ch;
+  font-size: var(--fs-body);
+  line-height: 1.75;
+  color: var(--text-secondary);
+  text-wrap: pretty;
+}
+
+.case__groups {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.case__group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.case__group-label {
+  margin: 0;
+  color: var(--text-tertiary);
+}
+
+.case__bullets {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 70ch;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text-secondary);
+  font-size: var(--fs-sm);
+  line-height: 1.7;
+
+  li {
+    display: grid;
+    grid-template-columns: 16px minmax(0, 1fr);
+    gap: 8px;
+
+    &::before {
+      content: '';
+      width: 10px;
+      height: 1px;
+      margin-top: 0.75em;
+      background-color: var(--ink-muted);
+    }
+  }
+}
+
+.case__stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// --- Footer -----------------------------------------------------------------
+
+.case__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: clamp(32px, 5vw, 56px);
+  border-top: 1px solid var(--line-hairline);
+}
+
+.case__missing {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding-block: clamp(64px, 12vw, 160px);
+}

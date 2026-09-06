@@ -1,0 +1,79 @@
+<div class="palette">
+  <!-- Clicking the backdrop closes. It is not the only way out: Escape works,
+       and a real Close button is in the footer for pointer users who cannot
+       reliably hit the backdrop. -->
+  <button
+    type="button"
+    class="palette__scrim"
+    tabindex="-1"
+    aria-hidden="true"
+    (click)="close()"
+  ></button>
+
+  <div
+    class="palette__panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="palette-title"
+    #panel
+  >
+    <h2 class="visually-hidden" id="palette-title">Command palette</h2>
+
+    <div class="palette__field">
+      <span class="palette__prompt meta" aria-hidden="true">⌘K</span>
+      <input
+        #input
+        class="palette__input"
+        type="text"
+        role="combobox"
+        aria-expanded="true"
+        aria-controls="palette-list"
+        aria-autocomplete="list"
+        [attr.aria-activedescendant]="activeId() ? 'cmd-' + activeId() : null"
+        placeholder="Search commands…"
+        autocomplete="off"
+        spellcheck="false"
+        [value]="query()"
+        (input)="onInput($any($event.target).value)"
+        (keydown)="onKeydown($event)"
+      />
+    </div>
+
+    <div class="palette__results" id="palette-list" role="listbox" aria-label="Commands">
+      @for (group of groups(); track group.label) {
+        <div class="palette__group" role="group" [attr.aria-label]="group.label">
+          <p class="meta palette__group-label">{{ group.label }}</p>
+          @for (command of group.commands; track command.id) {
+            <div
+              class="palette__item"
+              role="option"
+              [id]="'cmd-' + command.id"
+              [attr.aria-selected]="indexOf(command) === activeIndex()"
+              [class.is-active]="indexOf(command) === activeIndex()"
+              (mouseenter)="select(indexOf(command))"
+              (click)="runAt(indexOf(command))"
+            >
+              <span class="palette__item-label">{{ command.label }}</span>
+              @if (command.hint) {
+                <span class="palette__item-hint" aria-hidden="true">{{ command.hint }}</span>
+              }
+            </div>
+          }
+        </div>
+      } @empty {
+        <p class="palette__empty">No commands match “{{ query() }}”.</p>
+      }
+    </div>
+
+    <div class="palette__footer">
+      <p class="meta palette__hints" aria-hidden="true">
+        <span>↑↓ navigate</span><span>↵ select</span><span>esc close</span>
+      </p>
+      <button type="button" class="btn btn--sm" (click)="close()">Close</button>
+    </div>
+
+    <p class="visually-hidden" role="status" aria-live="polite">
+      {{ results().length }} commands available
+    </p>
+  </div>
+</div>

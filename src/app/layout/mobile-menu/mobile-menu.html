@@ -1,0 +1,40 @@
+<div
+  class="menu"
+  id="mobile-menu"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Navigation"
+  (keydown)="onKeydown($event)"
+>
+  <div class="menu__panel" #panel>
+    <div class="menu__head">
+      <p class="meta">Navigation</p>
+      <button type="button" class="btn btn--sm" (click)="close()">Close</button>
+    </div>
+
+    <ul class="menu__list" role="list">
+      @for (section of sections; track section.id) {
+        <li>
+          <a
+            class="menu__link"
+            [routerLink]="['/']"
+            [fragment]="section.id"
+            [attr.aria-current]="activeId() === section.id ? 'true' : null"
+            (click)="close()"
+          >
+            <span class="meta menu__index">{{ section.index }}</span>
+            <span>{{ section.label }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+
+    <div class="menu__footer">
+      <a class="btn btn--primary" [href]="contact.resumeFile" download>Download Résumé</a>
+      <div class="menu__social">
+        <a [href]="contact.github" rel="me noopener" target="_blank">GitHub</a>
+        <a [href]="contact.linkedin" rel="me noopener" target="_blank">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+</div>

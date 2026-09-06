@@ -1,0 +1,61 @@
+// ---------------------------------------------------------------------------
+// Typography foundation.
+//
+// Phase 1 uses system stacks so there are zero network font requests, zero CLS
+// and no CSP font-src surface. The intended families (Geist Sans / Geist Mono)
+// are named first in each stack — Phase 2 drops self-hosted woff2 subsets in
+// and the cascade picks them up with no other change.
+// ---------------------------------------------------------------------------
+
+:root {
+  --font-display:
+    'Geist Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
+  --font-body:
+    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono:
+    'Geist Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
+    monospace;
+
+  // Fluid type scale.
+  --fs-hero: clamp(2.8rem, 7vw, 6.5rem);
+  --fs-h1: clamp(2.2rem, 4.6vw, 3.6rem);
+  --fs-h2: clamp(1.75rem, 3.2vw, 2.5rem);
+  --fs-h3: clamp(1.3rem, 2.2vw, 1.6rem);
+  --fs-h4: 1.125rem;
+  --fs-body-lg: clamp(1.05rem, 1.4vw, 1.2rem);
+  --fs-body: 1rem;
+  --fs-sm: 0.9375rem;
+  --fs-xs: 0.8125rem;
+  --fs-mono-label: 0.75rem;
+
+  --lh-tight: 1.05;
+  --lh-heading: 1.18;
+  --lh-body: 1.7;
+
+  --tracking-display: -0.03em;
+  --tracking-heading: -0.02em;
+  --tracking-mono: 0.12em;
+}
+
+.u-h2 {
+  font-family: var(--font-display);
+  font-size: var(--fs-h2);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+  font-weight: 600;
+}
+
+.u-h3 {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-heading);
+  font-weight: 600;
+}
+
+.u-lede {
+  font-size: var(--fs-body-lg);
+  line-height: var(--lh-body);
+  color: var(--text-secondary);
+}

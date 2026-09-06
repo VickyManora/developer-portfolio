@@ -1,0 +1,65 @@
+@use 'mixins' as m;
+@use 'surfaces' as s;
+
+.intro {
+  display: grid;
+  gap: 40px;
+
+  @include m.respond-to('md') {
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    gap: 64px;
+  }
+}
+
+.intro__summary {
+  max-width: 60ch;
+  font-size: var(--fs-body-lg);
+  line-height: 1.75;
+  color: var(--text-secondary);
+
+  // The opening clause carries the weight; the rest supports it.
+  &::first-line {
+    color: var(--text-primary);
+  }
+}
+
+.intro__aside {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.intro__facts {
+  width: 100%;
+  margin: 0;
+  border-top: 1px solid var(--line-hairline);
+
+  > div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: 12px;
+    border-bottom: 1px solid var(--line-hairline);
+  }
+
+  dt {
+    font-family: var(--font-mono);
+    font-size: var(--fs-mono-label);
+    letter-spacing: var(--tracking-mono);
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+
+  dd {
+    margin: 0;
+    font-size: var(--fs-sm);
+    color: var(--text-primary);
+    text-align: right;
+  }
+}
+
+.intro__cta {
+  gap: 8px;
+}

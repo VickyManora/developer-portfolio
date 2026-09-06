@@ -1,0 +1,63 @@
+<section class="section" id="work" appObservedSection aria-labelledby="work-heading">
+  <div class="container">
+    <app-section-header
+      appReveal
+      index="03"
+      label="Work"
+      heading="Selected projects"
+      headingId="work-heading"
+    />
+
+    <!-- Tier 1: full case studies -->
+    <ul class="deep" role="list" appRevealGroup>
+      @for (item of deepProjects; track item.project.slug) {
+        <li class="deep__card">
+          <div class="deep__meta">
+            <p class="eyebrow">
+              <span class="eyebrow__index">Case study</span>
+            </p>
+            <p class="meta deep__dates">
+              <time [attr.datetime]="item.project.start">{{ item.range }}</time>
+            </p>
+            <p class="meta deep__domain">{{ item.project.domain }}</p>
+          </div>
+
+          <div class="deep__body">
+            <h3 class="deep__title">
+              <a class="deep__link" [routerLink]="['/work', item.project.slug]">
+                {{ item.name }}
+                <span class="deep__arrow" aria-hidden="true">→</span>
+              </a>
+            </h3>
+
+            <p class="deep__headline">{{ item.summary }}</p>
+              <p class="meta deep__role">{{ item.project.roleContext }}</p>
+
+            @if (item.stack) {
+              <ul class="deep__stack" role="list">
+                @for (tech of item.stack; track tech) {
+                  <li>
+                    <app-tag-chip>{{ tech }}</app-tag-chip>
+                  </li>
+                }
+              </ul>
+            } @else {
+              <app-pending-note field="Technology stack for this project" />
+            }
+          </div>
+        </li>
+      }
+    </ul>
+
+    <!-- Tier 2: expandable cards -->
+    <p class="eyebrow work__subhead" appReveal="fade">Also delivered</p>
+
+    <ul class="cards" role="list" appRevealGroup>
+      @for (item of cardProjects; track item.project.slug) {
+        <li>
+          <app-project-card [project]="item.project" />
+        </li>
+      }
+    </ul>
+  </div>
+</section>

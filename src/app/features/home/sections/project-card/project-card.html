@@ -1,0 +1,81 @@
+<article class="card">
+  <header class="card__head">
+    <div class="card__identity">
+      <p class="meta card__dates">
+        <time [attr.datetime]="project().start">{{ range() }}</time>
+      </p>
+      <h3 class="card__title">{{ name() }}</h3>
+      <p class="card__summary">{{ project().summary }}</p>
+      <p class="meta card__role">{{ project().roleContext }}</p>
+    </div>
+
+    @if (headlineMetrics().length > 0) {
+      <ul class="card__metrics" role="list">
+        @for (metric of headlineMetrics(); track metric.label) {
+          <li>
+            <span class="card__metric-value">{{ metric.value }}</span>
+            <span class="card__metric-label">{{ metric.label }}</span>
+          </li>
+        }
+      </ul>
+    }
+  </header>
+
+  @if (stack(); as tech) {
+    <ul class="card__stack" role="list">
+      @for (item of tech; track item) {
+        <li><app-tag-chip>{{ item }}</app-tag-chip></li>
+      }
+    </ul>
+  } @else {
+    <app-pending-note field="Technology stack for this project" />
+  }
+
+  <div class="card__panels">
+    <details class="panel">
+      <summary class="panel__summary">
+        <span>Engineering work</span>
+        <span class="panel__toggle" aria-hidden="true"></span>
+      </summary>
+      <div class="panel__body">
+        <ul class="panel__bullets" role="list">
+          @for (bullet of project().achievements; track bullet) {
+            <li>{{ bullet }}</li>
+          }
+        </ul>
+      </div>
+    </details>
+
+    <details class="panel">
+      <summary class="panel__summary">
+        <span>Impact</span>
+        <span class="panel__toggle" aria-hidden="true"></span>
+      </summary>
+      <div class="panel__body">
+        @if (headlineMetrics().length > 0) {
+          <ul class="panel__impact" role="list">
+            @for (metric of headlineMetrics(); track metric.label) {
+              <li>
+                <span class="panel__impact-value">{{ metric.value }}</span>
+                <span>{{ metric.label }}</span>
+              </li>
+            }
+          </ul>
+        }
+        @if (softMetrics().length > 0) {
+          <p class="panel__soft">
+            Also recorded:
+            @for (metric of softMetrics(); track metric.label; let last = $last) {
+              <span>{{ metric.value }} {{ metric.label }}{{ last ? '.' : '; ' }}</span>
+            }
+          </p>
+        }
+        @if (headlineMetrics().length === 0 && softMetrics().length === 0) {
+          <p class="panel__soft">
+            No quantified outcomes are recorded for this project in the source material.
+          </p>
+        }
+      </div>
+    </details>
+  </div>
+</article>

@@ -1,0 +1,55 @@
+<section class="hero" id="hero" appObservedSection aria-labelledby="hero-heading">
+  <div class="hero__inner">
+    <p class="eyebrow hero__eyebrow">
+      <span class="eyebrow__index">01</span>
+      <span class="eyebrow__divider" aria-hidden="true">/</span>
+      <span>Senior Full Stack Engineer</span>
+    </p>
+
+    <h1 class="hero__name" id="hero-heading" [attr.aria-label]="profile.name">
+      @for (char of nameChars; track $index) {
+        <span class="hero__char" [style.animation-delay]="char.delay" aria-hidden="true">{{
+          char.value === ' ' ? '&nbsp;' : char.value
+        }}</span>
+      }
+    </h1>
+
+    <p class="hero__line">
+      <span class="hero__line-clip">
+        <span class="hero__line-inner">{{ profile.heroLine }}</span>
+      </span>
+    </p>
+
+    <ul class="hero__chips" role="list">
+      <li>
+        <span class="chip chip--signal">{{ years }}</span>
+      </li>
+      @for (chip of proofChips; track chip) {
+        <li>
+          <span class="chip">{{ chip }}</span>
+        </li>
+      }
+    </ul>
+
+    <div class="hero__actions">
+      <a class="btn btn--primary" href="#work">View Work</a>
+      <a class="btn" [href]="contact.resumeFile" download>
+        Download Résumé<span class="btn__arrow" aria-hidden="true">↓</span>
+      </a>
+    </div>
+
+    <ul class="hero__social" role="list">
+      <li>
+        <a class="link" [href]="contact.github" rel="me noopener" target="_blank">GitHub</a>
+      </li>
+      <li>
+        <a class="link" [href]="contact.linkedin" rel="me noopener" target="_blank">LinkedIn</a>
+      </li>
+    </ul>
+  </div>
+
+  <p class="hero__scroll" aria-hidden="true">
+    <span class="hero__scroll-rule"></span>
+    Scroll
+  </p>
+</section>

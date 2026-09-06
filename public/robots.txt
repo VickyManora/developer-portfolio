@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# Sitemap line is written by tools/generate-sitemap.mjs at build time, once a
+# real domain is configured. It is intentionally absent while the domain is a
+# placeholder.

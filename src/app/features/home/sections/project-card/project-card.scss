@@ -1,0 +1,243 @@
+@use 'mixins' as m;
+@use 'surfaces' as s;
+
+.card {
+  @include s.card;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: clamp(20px, 2.6vw, 28px);
+  transition:
+    border-color var(--dur-3) var(--ease-standard),
+    background-color var(--dur-3) var(--ease-standard);
+
+  &:hover,
+  &:focus-within {
+    border-color: var(--line-strong);
+    background-color: var(--bg-raised);
+  }
+}
+
+.card__head {
+  display: grid;
+  gap: 20px;
+
+  @include m.respond-to('md') {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: 32px;
+    align-items: start;
+  }
+}
+
+.card__identity {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.card__dates {
+  white-space: nowrap;
+}
+
+.card__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  letter-spacing: var(--tracking-heading);
+  text-wrap: balance;
+}
+
+.card__summary {
+  max-width: 54ch;
+  color: var(--text-secondary);
+  font-size: var(--fs-sm);
+  line-height: 1.65;
+}
+
+.card__role {
+  margin-top: 2px;
+}
+
+// Compact metric strip in the card header — the always-visible proof.
+.card__metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 12px;
+    align-items: baseline;
+    padding-top: 8px;
+    border-top: 1px solid var(--line-hairline);
+  }
+}
+
+.card__metric-value {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.card__metric-label {
+  color: var(--text-secondary);
+  font-size: var(--fs-xs);
+  line-height: 1.45;
+}
+
+.card__stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// --- Expandable panels ------------------------------------------------------
+
+.card__panels {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line-hairline);
+}
+
+.panel {
+  border-bottom: 1px solid var(--line-hairline);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.panel__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  // 44px minimum interactive target.
+  min-height: 48px;
+  padding-block: 12px;
+  cursor: pointer;
+  list-style: none;
+  color: var(--text-primary);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+.panel__toggle {
+  position: relative;
+  flex: none;
+  width: 11px;
+  height: 11px;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    background-color: var(--text-tertiary);
+    transition: opacity var(--dur-2) var(--ease-standard);
+  }
+
+  &::before {
+    top: 50%;
+    left: 0;
+    width: 11px;
+    height: 1px;
+  }
+
+  &::after {
+    top: 0;
+    left: 50%;
+    width: 1px;
+    height: 11px;
+  }
+}
+
+.panel[open] .panel__toggle::after {
+  opacity: 0;
+}
+
+.panel__body {
+  padding-bottom: 18px;
+}
+
+.panel__bullets {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 74ch;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text-secondary);
+  font-size: var(--fs-sm);
+  line-height: 1.7;
+
+  li {
+    display: grid;
+    grid-template-columns: 16px minmax(0, 1fr);
+    gap: 8px;
+
+    &::before {
+      content: '';
+      width: 10px;
+      height: 1px;
+      margin-top: 0.75em;
+      background-color: var(--ink-muted);
+    }
+  }
+}
+
+.panel__impact {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 12px;
+    align-items: baseline;
+    color: var(--text-secondary);
+    font-size: var(--fs-sm);
+  }
+}
+
+.panel__impact-value {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+// Self-reported figures stay as body text, never as stat components.
+.panel__soft {
+  max-width: 70ch;
+  color: var(--text-tertiary);
+  font-size: var(--fs-xs);
+  line-height: 1.6;
+}

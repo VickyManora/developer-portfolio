@@ -1,0 +1,63 @@
+<section class="section" id="contact" appObservedSection aria-labelledby="contact-heading">
+  <div class="container">
+    <app-section-header
+      appReveal
+      index="07"
+      label="Contact"
+      heading="Get in touch"
+      headingId="contact-heading"
+    />
+
+    <div class="contact" appReveal>
+      <div class="contact__lead">
+        <p class="contact__pitch">
+          Open to conversations about senior full stack and frontend architecture work.
+        </p>
+        <p class="contact__where">
+          {{ contact.location }}
+          <span class="contact__dot" aria-hidden="true"></span>
+          {{ contact.timezone }}
+        </p>
+      </div>
+
+      <!-- Four primary actions, equal weight, each one a single click. -->
+      <ul class="actions" role="list" appRevealGroup>
+        <li>
+          <a class="action action--primary" [href]="'mailto:' + contact.email">
+            <span class="action__label">Email</span>
+            <span class="action__value">{{ contact.email }}</span>
+            <span class="action__glyph" aria-hidden="true">→</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="action"
+            [href]="contact.linkedin"
+            rel="me noopener noreferrer"
+            target="_blank"
+          >
+            <span class="action__label">LinkedIn</span>
+            <span class="action__value">linkedin.com/in/vicky-manora</span>
+            <span class="action__glyph" aria-hidden="true">↗</span>
+            <span class="visually-hidden">(opens in a new tab)</span>
+          </a>
+        </li>
+        <li>
+          <a class="action" [href]="contact.github" rel="me noopener noreferrer" target="_blank">
+            <span class="action__label">GitHub</span>
+            <span class="action__value">github.com/VickyManora</span>
+            <span class="action__glyph" aria-hidden="true">↗</span>
+            <span class="visually-hidden">(opens in a new tab)</span>
+          </a>
+        </li>
+        <li>
+          <a class="action" [href]="contact.resumeFile" download>
+            <span class="action__label">Résumé</span>
+            <span class="action__value">PDF download</span>
+            <span class="action__glyph" aria-hidden="true">↓</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>

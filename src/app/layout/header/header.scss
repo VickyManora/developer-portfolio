@@ -1,0 +1,228 @@
+@use 'mixins' as m;
+@use 'surfaces' as s;
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  @include s.frosted;
+  border-width: 0 0 1px;
+  // Transparent until the reader leaves the hero, so the backdrop reads as one
+  // continuous field behind the top of the page.
+  background-color: transparent;
+  border-bottom-color: transparent;
+  transition:
+    background-color var(--dur-3) var(--ease-standard),
+    border-color var(--dur-3) var(--ease-standard);
+}
+
+.header.is-compact {
+  background-color: var(--scrim);
+  border-bottom-color: var(--line-hairline);
+}
+
+.header__inner {
+  @include m.container;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: var(--header-height);
+  // Height is animated, not layout: min-height on a sticky bar reflows nothing
+  // below it, because the bar is out of flow once stuck.
+  transition: min-height var(--dur-3) var(--ease-standard);
+}
+
+.header.is-compact .header__inner {
+  min-height: calc(var(--header-height) - 12px);
+}
+
+.header__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: var(--tracking-heading);
+  white-space: nowrap;
+}
+
+// The logomark is a system node: a small square with a hairline orbit.
+.header__mark {
+  position: relative;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background-image: var(--accent-gradient);
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+  }
+}
+
+.header__nav {
+  display: none;
+
+  @media (min-width: 1024px) {
+    display: block;
+  }
+}
+
+.header__list {
+  display: flex;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.header__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 10px;
+  border-radius: 4px;
+  position: relative;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+  transition: color var(--dur-2) var(--ease-standard);
+
+  // Active indicator: a 2px tick that grows from the centre. Transform only.
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 8px;
+    left: 10px;
+    right: 10px;
+    height: 2px;
+    border-radius: 1px;
+    background-image: var(--accent-gradient);
+    transform: scaleX(0);
+    transition: transform var(--dur-3) var(--ease-out);
+  }
+
+  &:hover {
+    color: var(--text-primary);
+  }
+}
+
+.header__link--active {
+  color: var(--text-primary);
+
+  &::after {
+    transform: scaleX(1);
+  }
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.header__icon-link {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;
+  color: var(--text-secondary);
+  transition: color var(--dur-2) var(--ease-standard);
+
+  &:hover {
+    color: var(--text-primary);
+  }
+
+  @include m.respond-to('md') {
+    display: inline-flex;
+  }
+}
+
+.header__pref {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 10px;
+  border-radius: 4px;
+  color: var(--text-tertiary);
+  transition: color var(--dur-2) var(--ease-standard);
+
+  &:hover {
+    color: var(--text-secondary);
+  }
+
+  @media (min-width: 1280px) {
+    display: inline-flex;
+  }
+}
+
+.header__pref-state {
+  color: var(--text-primary);
+}
+
+.header__command {
+  display: none;
+  gap: 10px;
+  color: var(--text-tertiary);
+
+  @media (min-width: 1280px) {
+    display: inline-flex;
+  }
+}
+
+.header__kbd {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-label);
+}
+
+.header__cta {
+  gap: 6px;
+}
+
+.header__burger {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;
+
+  @media (min-width: 1024px) {
+    display: none;
+  }
+}
+
+.header__burger-bar {
+  display: block;
+  width: 18px;
+  height: 1px;
+  background-color: var(--text-secondary);
+}
+
+.header__progress {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: transparent;
+}
+
+.header__progress-fill {
+  display: block;
+  height: 100%;
+  background-image: var(--accent-gradient);
+}

@@ -1,0 +1,118 @@
+@use 'surfaces' as s;
+
+:host {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  contain: layout paint style;
+}
+
+.backdrop__grid {
+  position: absolute;
+  inset: 0;
+  @include s.technical-grid(72px);
+  // Fades the grid out toward the edges so it never reads as graph paper.
+  mask-image: radial-gradient(70% 60% at 60% 45%, #000 0%, transparent 100%);
+}
+
+// The restrained gradient field. Low-opacity colour mixes, never a saturated
+// wash across a large surface.
+.backdrop__field {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      52% 44% at 72% 28%,
+      color-mix(in srgb, var(--accent) 13%, transparent) 0%,
+      transparent 72%
+    ),
+    radial-gradient(
+      40% 38% at 18% 72%,
+      color-mix(in srgb, var(--accent-2) 8%, transparent) 0%,
+      transparent 74%
+    ),
+    radial-gradient(
+      30% 26% at 88% 78%,
+      color-mix(in srgb, var(--accent-warm) 5%, transparent) 0%,
+      transparent 76%
+    );
+}
+
+.backdrop__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  mask-image: radial-gradient(75% 68% at 62% 42%, #000 20%, transparent 100%);
+}
+
+.backdrop__edges line {
+  stroke: var(--ink-muted);
+  stroke-width: 1;
+  // Low enough that the lattice reads as depth rather than as a chart.
+  opacity: 0.3;
+}
+
+.backdrop__strata line {
+  stroke: var(--line-hairline);
+  stroke-width: 1;
+  stroke-dasharray: 1 12;
+}
+
+.backdrop__nodes rect {
+  fill: var(--text-tertiary);
+  opacity: 0.45;
+
+  &.is-key {
+    fill: var(--text-secondary);
+    opacity: 0.68;
+  }
+}
+
+// Saturated accent lives only here: four 7px dots.
+.backdrop__signals circle {
+  fill: var(--accent);
+}
+
+// A slow, low-amplitude pulse. Opacity only — no transform, no layout, no
+// paint outside these four dots. Off entirely under reduced motion.
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-motion='reduced']) .backdrop__signals circle {
+    animation: node-pulse 5.5s var(--ease-in-out) infinite;
+
+    &:nth-child(2) {
+      animation-delay: 1.4s;
+    }
+    &:nth-child(3) {
+      animation-delay: 2.8s;
+    }
+    &:nth-child(4) {
+      animation-delay: 4.1s;
+    }
+  }
+}
+
+@keyframes node-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+// Guarantees the text column always sits on sufficient contrast, regardless of
+// where the gradient field lands.
+.backdrop__fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    var(--bg-void) 0%,
+    color-mix(in srgb, var(--bg-void) 82%, transparent) 42%,
+    transparent 70%
+  );
+}

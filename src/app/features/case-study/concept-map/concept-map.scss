@@ -1,0 +1,49 @@
+@use 'mixins' as m;
+@use 'surfaces' as s;
+
+.map {
+  display: grid;
+  gap: 1px;
+  background-color: var(--line-hairline);
+  border: 1px solid var(--line-hairline);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
+}
+
+.map__group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  background-color: var(--bg-surface);
+}
+
+.map__label {
+  margin: 0;
+  color: var(--accent);
+}
+
+.map__items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.map__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-secondary);
+  font-size: var(--fs-sm);
+}
+
+.map__tick {
+  flex: none;
+  width: 10px;
+  height: 1px;
+  background-color: var(--ink-muted);
+}

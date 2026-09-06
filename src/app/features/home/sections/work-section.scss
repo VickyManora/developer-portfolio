@@ -1,0 +1,144 @@
+@use 'mixins' as m;
+@use 'surfaces' as s;
+
+// --- Tier 1: case studies ---------------------------------------------------
+
+.deep {
+  display: grid;
+  gap: 16px;
+  margin: 0 0 clamp(48px, 7vw, 88px);
+  padding: 0;
+  list-style: none;
+}
+
+.deep__card {
+  @include s.card;
+  @include s.lifted;
+  display: grid;
+  gap: 20px;
+  padding: clamp(24px, 3vw, 36px);
+  transition:
+    border-color var(--dur-3) var(--ease-standard),
+    background-color var(--dur-3) var(--ease-standard),
+    transform var(--dur-3) var(--ease-out);
+
+  &:hover,
+  &:focus-within {
+    border-color: var(--line-strong);
+    background-color: var(--bg-raised);
+    transform: translateY(-2px);
+
+    .deep__arrow {
+      transform: translateX(4px);
+    }
+  }
+
+  @include m.respond-to('md') {
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 40px;
+  }
+}
+
+.deep__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.deep__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.deep__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  letter-spacing: var(--tracking-heading);
+}
+
+.deep__link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  color: var(--text-primary);
+  text-decoration: none;
+
+  // Expands the hit area to the whole card without nesting interactive
+  // elements — the link stays the only focusable target.
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-card);
+  }
+
+  &:hover {
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--accent) 60%, transparent);
+    text-underline-offset: 0.22em;
+  }
+}
+
+.deep__arrow {
+  color: var(--accent);
+  transition: transform var(--dur-3) var(--ease-out);
+}
+
+.deep__role {
+  margin-top: -6px;
+}
+
+.deep__headline {
+  max-width: 68ch;
+  color: var(--text-secondary);
+  font-size: var(--fs-sm);
+  line-height: 1.65;
+}
+
+.deep__stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// --- Tier 2: expandable cards -----------------------------------------------
+
+.work__subhead {
+  margin-bottom: 16px;
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// Reduced motion: keep every hover response, drop the displacement.
+@media (prefers-reduced-motion: reduce) {
+  .deep__card:hover,
+  .deep__card:focus-within {
+    transform: none;
+  }
+
+  .deep__card:hover .deep__arrow,
+  .deep__card:focus-within .deep__arrow {
+    transform: none;
+  }
+}
+
+:root[data-motion='reduced'] {
+  .deep__card:hover,
+  .deep__card:focus-within,
+  .deep__card:hover .deep__arrow {
+    transform: none;
+  }
+}

@@ -1,0 +1,139 @@
+@use 'mixins' as m;
+@use 'surfaces' as s;
+
+.palette {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: clamp(12px, 8vh, 96px) 16px 16px;
+}
+
+.palette__scrim {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  background-color: color-mix(in srgb, var(--bg-void) 78%, transparent);
+  backdrop-filter: blur(4px);
+  cursor: default;
+}
+
+.palette__panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 560px);
+  max-height: min(72vh, 560px);
+  @include s.card(var(--radius-panel));
+  background-color: var(--bg-surface);
+  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+.palette__field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--line-hairline);
+}
+
+.palette__prompt {
+  flex: none;
+  color: var(--text-tertiary);
+}
+
+.palette__input {
+  flex: 1;
+  min-width: 0;
+  // 48px keeps the field a comfortable touch target.
+  min-height: 52px;
+  border: 0;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: var(--fs-body);
+
+  &::placeholder {
+    color: var(--text-tertiary);
+  }
+
+  &:focus {
+    // The dialog itself is the focus context; a ring inside the field would
+    // double up with the panel border.
+    outline: none;
+  }
+}
+
+.palette__results {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  overscroll-behavior: contain;
+}
+
+.palette__group + .palette__group {
+  margin-top: 8px;
+}
+
+.palette__group-label {
+  padding: 8px 10px 6px;
+  color: var(--text-tertiary);
+}
+
+.palette__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+  padding: 0 10px;
+  border-radius: var(--radius-chip);
+  color: var(--text-secondary);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+}
+
+// Selection lives on the option, not on focus: focus stays in the input so the
+// user can keep typing while arrowing through results.
+.palette__item.is-active {
+  background-color: var(--accent-soft);
+  color: var(--text-primary);
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+.palette__item-hint {
+  flex: none;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-label);
+}
+
+.palette__empty {
+  padding: 20px 10px;
+  color: var(--text-tertiary);
+  font-size: var(--fs-sm);
+}
+
+.palette__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--line-hairline);
+}
+
+.palette__hints {
+  display: flex;
+  gap: 14px;
+  margin: 0;
+  color: var(--text-tertiary);
+
+  @include m.below('sm') {
+    // Keyboard hints are noise on touch.
+    display: none;
+  }
+}

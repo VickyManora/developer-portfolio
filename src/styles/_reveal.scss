@@ -1,0 +1,142 @@
+// ---------------------------------------------------------------------------
+// Entrance motion.
+//
+// Two independent systems, on purpose:
+//
+//   * The hero entrance is PURE CSS. It must start at first paint and must not
+//     wait on hydration or on the lazily-loaded GSAP chunk — the H1 is the LCP
+//     element, and gating it behind JavaScript would trade a real metric for a
+//     cosmetic one.
+//
+//   * Everything below the fold is GSAP + ScrollTrigger, applied by the reveal
+//     directives. Those add `.is-reveal-pending` client-side only, so the
+//     prerendered HTML always ships fully visible.
+// ---------------------------------------------------------------------------
+
+.is-reveal-pending {
+  opacity: 0;
+  // No transform here: GSAP owns it, and declaring one would fight `fromTo`.
+  will-change: opacity, transform;
+}
+
+// --- Hero entrance ----------------------------------------------------------
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+// The name settles into place WITHOUT fading.
+//
+// The H1 is the LCP element. An opacity fade on it means the browser has
+// nothing painted to measure until the animation starts, which cost 0.2s of
+// LCP when it was included. Transform-only keeps the glyphs painted from the
+// first frame — the motion is a settle, not a reveal, which also suits the
+// "precision over spectacle" brief better than a big entrance would.
+@keyframes hero-settle {
+  from {
+    transform: translate3d(0, 0.26em, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+// Line-based reveal: the text rises from behind its own overflow edge. Clip is
+// on the wrapper, transform on the inner span — no layout properties.
+//
+// The travel is 0.45em rather than a full 100%. A full-height translate leaves
+// the text completely outside the clip, which makes it invisible — and any
+// invisible text in the hero is a candidate to become the LCP element and
+// delay it. At 0.45em the line still visibly emerges from the clip edge while
+// being painted in the very first frame.
+@keyframes hero-line-in {
+  from {
+    transform: translate3d(0, 0.45em, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes hero-rule-in {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@mixin hero-enter($delay, $name: hero-rise, $duration: 560ms) {
+  animation: $name $duration var(--ease-out) $delay both;
+}
+
+// The whole hero entrance is opt-in via this attribute, which the reduced-motion
+// blocks below strip. Nothing animates unless motion is allowed.
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-motion='reduced']) {
+    // Transform-only, no delay. Measurement showed this element winning the
+    // LCP race on mobile — an opacity fade here cost ~0.5s of LCP, because
+    // Chrome will not record LCP for text that has not been painted yet.
+    .hero__eyebrow {
+      @include hero-enter(0ms, hero-settle, 520ms);
+    }
+
+    // The one character-level animation on the entire site.
+    .hero__char {
+      display: inline-block;
+      @include hero-enter(0ms, hero-settle, 620ms);
+    }
+
+    .hero__line-inner {
+      @include hero-enter(0ms, hero-line-in, 640ms);
+    }
+
+    .hero__chips {
+      @include hero-enter(620ms);
+    }
+
+    .hero__actions {
+      @include hero-enter(700ms);
+    }
+
+    .hero__social {
+      @include hero-enter(770ms);
+    }
+
+    .hero__scroll {
+      @include hero-enter(1000ms);
+    }
+
+    .section-header::before {
+      transform-origin: left center;
+    }
+  }
+}
+
+// --- Reduced motion ---------------------------------------------------------
+//
+// The reveal directives never add `.is-reveal-pending` when motion is off, so
+// this is a safety net for the case where the preference changes mid-session:
+// anything still hidden becomes visible immediately, in its final state.
+
+@media (prefers-reduced-motion: reduce) {
+  .is-reveal-pending {
+    opacity: 1 !important;
+    transform: none !important;
+    will-change: auto;
+  }
+}
+
+:root[data-motion='reduced'] .is-reveal-pending {
+  opacity: 1 !important;
+  transform: none !important;
+  will-change: auto;
+}

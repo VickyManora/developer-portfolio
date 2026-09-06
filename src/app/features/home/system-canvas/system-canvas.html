@@ -1,0 +1,12 @@
+<!-- Static architectural composition. Always present in the prerendered HTML,
+     and the permanent visual when WebGL is unavailable or fails. -->
+@if (showFallback()) {
+  <app-system-backdrop />
+}
+
+@if (canUseWebgl()) {
+  <canvas #canvas class="stage__canvas" [class.is-live]="status() === 'running'"></canvas>
+}
+
+<!-- Guarantees text contrast over whatever the scene renders behind it. -->
+<div class="stage__scrim"></div>

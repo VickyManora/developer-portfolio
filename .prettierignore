@@ -1,0 +1,6 @@
+dist
+.angular
+coverage
+node_modules
+src/environments/build-info.ts
+*.md

@@ -1,0 +1,61 @@
+<section class="section" id="experience" appObservedSection aria-labelledby="experience-heading">
+  <div class="container">
+    <app-section-header
+      appReveal
+      index="02"
+      label="Experience"
+      heading="Career"
+      headingId="experience-heading"
+    />
+
+    <div class="timeline-wrap" #timelineWrap>
+      <!-- Static spine plus a scrubbed overlay. Both are decorative; the
+           timeline is fully legible with neither. -->
+      <span class="timeline__spine" aria-hidden="true"></span>
+      <span class="timeline__spine-active" aria-hidden="true" #spine></span>
+
+      <ol class="timeline" role="list">
+        @for (item of roles; track item.role.id) {
+          <li
+            class="timeline__item"
+            [class.is-minimal]="item.role.minimalByDesign"
+            data-timeline-item
+          >
+            <div class="timeline__rail" aria-hidden="true">
+              <span class="timeline__node"></span>
+            </div>
+
+            <div class="timeline__body" data-timeline-body>
+              <p class="timeline__meta meta">
+                <time [attr.datetime]="item.role.start">{{ item.range }}</time>
+                <span class="timeline__dot" aria-hidden="true"></span>
+                <span>{{ item.duration }}</span>
+              </p>
+
+              <h3 class="timeline__company">{{ item.role.company }}</h3>
+              <p class="timeline__title">{{ item.role.title }}</p>
+
+              @if (item.projects.length > 0) {
+                <ul class="timeline__projects" role="list">
+                  @for (project of item.projects; track project.slug) {
+                    <li>
+                      <span class="timeline__project-tick" aria-hidden="true"></span>
+                      @if (project.deep) {
+                        <a class="timeline__project-link" [routerLink]="['/work', project.slug]">
+                          {{ project.name }}
+                          <span class="timeline__project-arrow" aria-hidden="true">→</span>
+                        </a>
+                      } @else {
+                        <span>{{ project.name }}</span>
+                      }
+                    </li>
+                  }
+                </ul>
+              }
+            </div>
+          </li>
+        }
+      </ol>
+    </div>
+  </div>
+</section>

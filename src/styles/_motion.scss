@@ -1,0 +1,73 @@
+// ---------------------------------------------------------------------------
+// Global motion policy.
+//
+// Two independent off-switches, both honoured:
+//   1. prefers-reduced-motion (OS level)
+//   2. data-motion="reduced" on <html> (in-app toggle, for users on shared or
+//      managed machines who never set the OS flag)
+//
+// Reduced motion is a different experience, not a degraded one: content lands
+// at its final state immediately.
+// ---------------------------------------------------------------------------
+
+@mixin kill-motion {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion='full']) {
+    @include kill-motion;
+  }
+}
+
+:root[data-motion='reduced'] {
+  @include kill-motion;
+}
+
+// --- Route transitions ------------------------------------------------------
+// Angular's withViewTransitions drives the native API. The default UA
+// cross-fade is 250ms and slightly soft; this tightens it and adds a small
+// rise on the incoming view. No loading state, no spinner, nothing blocking.
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) {
+    animation: vt-out 160ms var(--ease-standard) both;
+  }
+
+  ::view-transition-new(root) {
+    animation: vt-in 260ms var(--ease-out) both;
+  }
+}
+
+@keyframes vt-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+// The in-app toggle must silence view transitions too. The router already
+// calls skipTransition() for it, and this is the CSS-side belt and braces.
+:root[data-motion='reduced'] {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
