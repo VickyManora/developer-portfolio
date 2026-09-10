@@ -1,29 +1,30 @@
 import type { Skill, SkillGroup } from '../core/models/content.models';
 
 /**
- * Source: PHASE-0-CONTENT-FINAL.md §7.
+ * Source: the updated resume (2026-09-10), SKILLS block, verbatim.
  *
- * A pure reorganization of the resume's confirmed technologies. Nothing added.
- * jQuery and LESS are confirmed resume skills but omitted from the site grid
- * per locked decision 12 — they remain in the résumé PDF.
+ * Groups mirror the resume's own categories so every entry is traceable to a
+ * line in the source. `layer` is the architecture stratum the 3D graph uses;
+ * `bucket` is the presentation grouping. Keeping them separate means the visual
+ * arrangement can change without touching the scene mapping.
  *
  * CONTENT SAFETY
  * --------------
- * There are no proficiency percentages, skill ratings or years-per-technology
- * here, because the resume states none. `emphasis` is a presentation weighting
- * — which technologies the portfolio leads with — not a claim about ability.
- * The grouping is editorial too, and the UI says so.
+ * No proficiency percentages, ratings or years-per-technology: the resume
+ * states none. `emphasis` is a presentation weighting — which technologies the
+ * portfolio leads with — not a claim about ability.
  *
- * `layer` stays as the architecture stratum the 3D graph uses; `bucket` is the
- * presentation grouping. Keeping them separate means the visual arrangement can
- * change without touching the scene mapping.
+ * C, C++ and Data Structures & Algorithms were in the previous resume's skills
+ * block and are absent from this one, so they are gone from here too. C# and
+ * .NET remain only where the resume still lists them: in the BOSCH and Chevron
+ * project stacks.
  */
-const s = (
-  id: string,
-  name: string,
-  emphasis: Skill['emphasis'],
-  inGraph = false,
-): Skill => ({ id, name, emphasis, inGraph });
+const s = (id: string, name: string, emphasis: Skill['emphasis'], inGraph = false): Skill => ({
+  id,
+  name,
+  emphasis,
+  inGraph,
+});
 
 export const SKILL_GROUPS: readonly SkillGroup[] = [
   {
@@ -39,62 +40,94 @@ export const SKILL_GROUPS: readonly SkillGroup[] = [
       s('javascript', 'JavaScript (OOJS)', 'primary'),
       s('html5', 'HTML5', 'primary'),
       s('scss', 'SCSS / CSS3', 'primary', true),
-      s('microfrontend', 'Microfrontend', 'supporting', true),
-      s('angular-material', 'Angular Material', 'supporting'),
       s('bootstrap', 'Bootstrap', 'supporting'),
+      s('jquery', 'jQuery', 'supporting'),
     ],
   },
   {
     layer: 'application',
     bucket: 'backend',
     depth: 2,
-    label: 'Application',
+    label: 'Architecture',
     skills: [
-      s('nodejs', 'Node.js', 'supporting', true),
-      s('express', 'Express.js', 'supporting', true),
-      s('dsa', 'Data Structures & Algorithms', 'supporting'),
+      s('microfrontend', 'Microfrontend architecture', 'supporting', true),
+      s('component-libraries', 'Component libraries', 'supporting', true),
+      s('modular-architecture', 'Modular architecture', 'supporting'),
+      s('clean-code', 'Clean code', 'supporting'),
     ],
   },
   {
     layer: 'services',
     bucket: 'backend',
     depth: 1,
-    label: 'Services & languages',
+    label: 'Backend & APIs',
     skills: [
+      s('nodejs', 'Node.js', 'supporting', true),
+      s('express', 'Express.js', 'supporting', true),
       s('python', 'Python', 'supporting', true),
-      s('csharp', 'C#', 'supporting', true),
-      s('dotnet', '.NET', 'supporting', true),
-      s('cpp', 'C++', 'supporting', true),
-      s('c', 'C', 'supporting'),
+      s('rest-apis', 'REST APIs', 'supporting', true),
+      s('api-design', 'API design', 'supporting'),
+      s('backend-services', 'Backend services', 'supporting'),
+    ],
+  },
+  {
+    layer: 'data-cloud',
+    bucket: 'data',
+    depth: 0,
+    label: 'Data & databases',
+    skills: [
+      s('sql', 'SQL', 'supporting', true),
+      s('mongodb', 'MongoDB', 'supporting', true),
+      s('data-modeling', 'Data modeling', 'supporting'),
+      s('database-design', 'Database design', 'supporting'),
     ],
   },
   {
     layer: 'data-cloud',
     bucket: 'cloud',
     depth: 0,
-    label: 'Cloud',
-    skills: [s('aws', 'AWS', 'supporting', true), s('azure', 'Azure', 'supporting', true)],
-  },
-  {
-    layer: 'data-cloud',
-    bucket: 'data',
-    depth: 0,
-    label: 'Data',
-    skills: [s('sql', 'SQL', 'supporting', true), s('mongodb', 'MongoDB', 'supporting', true)],
+    label: 'Cloud & DevOps',
+    skills: [
+      s('aws', 'AWS', 'supporting', true),
+      s('azure', 'Azure', 'supporting', true),
+      s('azure-devops', 'Azure DevOps', 'supporting', true),
+      s('jenkins', 'Jenkins', 'supporting', true),
+      s('git', 'Git', 'supporting', true),
+      s('cicd', 'CI/CD', 'supporting'),
+    ],
   },
   {
     layer: 'delivery',
     bucket: 'tooling',
     depth: 2,
-    label: 'Delivery & quality',
+    label: 'Testing & quality',
     skills: [
-      s('git', 'Git', 'supporting', true),
-      s('jenkins', 'Jenkins', 'supporting', true),
-      s('azure-devops', 'Azure DevOps', 'supporting', true),
+      s('playwright', 'Playwright', 'supporting', true),
       s('karma-jasmine', 'Karma & Jasmine', 'supporting', true),
-      s('azure-boards', 'Azure Boards', 'supporting'),
-      s('jira', 'JIRA', 'supporting'),
-      s('figma', 'Figma', 'supporting'),
+      s('unit-testing', 'Unit testing', 'supporting'),
+      s('automation-testing', 'Automation testing', 'supporting'),
+      s('app-security', 'Application security', 'supporting'),
+    ],
+  },
+  {
+    layer: 'delivery',
+    bucket: 'tooling',
+    depth: 2,
+    label: 'AI',
+    skills: [
+      s('ai-assisted', 'AI-assisted development', 'supporting', true),
+      s('agentic-apps', 'Agentic / AI applications', 'supporting'),
+    ],
+  },
+  {
+    layer: 'delivery',
+    bucket: 'tooling',
+    depth: 2,
+    label: 'Observability',
+    skills: [
+      s('signoz', 'SigNoz', 'supporting', true),
+      s('app-monitoring', 'Application monitoring', 'supporting'),
+      s('observability-dashboards', 'Observability dashboards', 'supporting'),
     ],
   },
 ];

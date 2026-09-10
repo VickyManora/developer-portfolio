@@ -129,10 +129,23 @@
 }
 
 // Labels expand on hover or keyboard focus anywhere in the rail, so the rail
-// stays quiet while reading but is fully legible when used.
+// stays quiet while reading but is fully legible when used. Hover and focus
+// are intentional and transient, so they may expand at any width.
 .rail:hover .rail__label,
-.rail:focus-within .rail__label,
-.rail__link--active .rail__label {
+.rail:focus-within .rail__label {
   max-width: 200px;
   opacity: 1;
+}
+
+// The active label is persistent, so it only expands where it genuinely clears
+// the content column. The 1360px breakpoint above clears the *collapsed* rail;
+// an expanded label is ~200px wider and overlaps the widest content rows
+// (measured against the primary skill chips: 85px at 1360, 45px at 1440,
+// clear from 1600). Below that it stays collapsed and the active state reads
+// from the accent tick and index, which is how the rail reads on hover anyway.
+@media (min-width: 1600px) {
+  .rail__link--active .rail__label {
+    max-width: 200px;
+    opacity: 1;
+  }
 }

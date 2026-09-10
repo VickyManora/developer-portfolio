@@ -19,9 +19,10 @@ export const PROFILE: Profile = {
   heroLine:
     'Senior full stack engineer specializing in secure, high-performance web applications across Angular, React, Node.js, AWS and Azure.',
 
-  // Verbatim resume summary; only edit is "8+" -> "9+" per locked decision 10.
+  // Verbatim from the updated resume (2026-09-10). The figure is now "9+" in
+  // the source itself, matching the value the site already computed.
   summary:
-    'Senior Full Stack Engineer (9+ years), NIT Bhopal alumnus, specializing in secure, high-performance web applications. Strong background in Angular, React, Node.js, and cloud-native architectures (AWS & Azure). Known for improving application security, optimizing delivery timelines using AI-driven development, and driving projects from design to production with technical ownership.',
+    'Senior Full Stack Engineer with 9+ years of experience building and shipping production web applications and scalable platform solutions. Strong expertise in Angular, React, Node.js, Python, TypeScript, SQL and MongoDB, with hands-on experience across frontend architecture, backend services, APIs, reusable component systems, dashboards and cloud-native applications on AWS and Azure. Experienced in owning features end-to-end from technical design and data modeling through implementation, testing and production delivery. Strong background in platform engineering, microfrontend architecture, AI-powered applications, application security and high-performance data-driven interfaces.',
 
   proofChips: ['ANGULAR · REACT · NODE.JS', 'AWS · AZURE', 'NIT BHOPAL'],
 

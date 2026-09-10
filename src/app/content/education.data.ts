@@ -1,17 +1,18 @@
-import { NEEDS_INPUT, type Education } from '../core/models/content.models';
+import type { Education } from '../core/models/content.models';
 
 /**
  * Source: PHASE-0-CONTENT-FINAL.md §9.
  *
- * The two school entries in the resume are omitted from the site per locked
- * decision 13; they remain in the résumé PDF.
+ * The two school entries were omitted from the site per locked decision 13,
+ * and the updated resume (2026-09-10) drops them as well.
  */
 export const EDUCATION: readonly Education[] = [
   {
     institution: 'Maulana Azad National Institute of Technology (MANIT), Bhopal',
     degree: 'B.Tech',
-    // Not stated anywhere in the resume. Launch-gated.
-    branch: NEEDS_INPUT,
+    // Supplied by Vicky, 2026-09-10. The resume states the degree but not the
+    // discipline.
+    branch: 'Electronics & Communication Engineering',
     start: '2013-06',
     end: '2017-04',
     grade: '7.7 CGPA',
