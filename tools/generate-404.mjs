@@ -26,10 +26,7 @@ if (!existsSync(shell)) {
 // with the NotFound route once it hydrates.
 let html = readFileSync(shell, 'utf8');
 
-html = html.replace(
-  /<title>[^<]*<\/title>/,
-  '<title>Page not found — Vicky Manora</title>',
-);
+html = html.replace(/<title>[^<]*<\/title>/, '<title>Page not found — Vicky Manora</title>');
 
 // The CSR shell is rendered before any route runs, so SeoService never touched
 // it and it carries no Open Graph tags. A mistyped or stale link pasted into a
