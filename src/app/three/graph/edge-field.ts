@@ -59,7 +59,6 @@ export class EdgeField {
         uBase: { value: new Color(SCENE_PALETTE.edge) },
         uActive: { value: new Color(SCENE_PALETTE.edgeActive) },
         uOpacity: { value: 1.0 },
-        uRecede: { value: 0 },
         uFogDensity: { value: 0.055 },
         uFogColor: { value: new Color(SCENE_PALETTE.fog) },
       },
@@ -83,7 +82,6 @@ export class EdgeField {
         uniform vec3 uBase;
         uniform vec3 uActive;
         uniform float uOpacity;
-        uniform float uRecede;
         uniform float uFogDensity;
         uniform vec3 uFogColor;
         varying float vStrength;
@@ -92,7 +90,7 @@ export class EdgeField {
 
         void main() {
           vec3 colour = mix(uBase, uActive, vEmphasis);
-          float alpha = uOpacity * (0.62 + vStrength * 0.6 + vEmphasis * 0.8) * (1.0 - uRecede * 0.86);
+          float alpha = uOpacity * (0.62 + vStrength * 0.6 + vEmphasis * 0.8);
 
           // Exponential-squared fog, matched to the scene fog so edges recede
           // with everything else rather than floating in front of it.
@@ -109,10 +107,6 @@ export class EdgeField {
     this.lines = new LineSegments(geometry, material);
     this.lines.frustumCulled = false;
     this.lines.renderOrder = 1;
-  }
-
-  setRecede(value: number): void {
-    (this.lines.material as ShaderMaterial).uniforms['uRecede'].value = value;
   }
 
   setFogDensity(value: number): void {

@@ -122,19 +122,10 @@ export class FlowField {
     this.material.uniforms['uPixelRatio'].value = value;
   }
 
-  /** Fades packets back while the helix is on screen. */
-  setRecede(value: number): void {
-    this.material.uniforms['uIntensity'].value =
-      this.baseIntensity * (1 - value * 0.85);
-  }
-
   /** 0 stills the flow completely without removing the packets. */
   setIntensity(value: number): void {
-    this.baseIntensity = value;
     this.material.uniforms['uIntensity'].value = value;
   }
-
-  private baseIntensity = 1;
 
   advance(elapsed: number): void {
     this.material.uniforms['uTime'].value = elapsed;

@@ -28,7 +28,6 @@ function base(): MutableChapterState {
     anchors: new Map(),
     flow: 1,
     ambient: 1,
-    helix: 0,
   };
 }
 
@@ -52,31 +51,20 @@ export class HeroChapter extends StatelessChapter {
 }
 
 /**
- * EXPERIENCE — the architecture resolves into a double helix.
+ * EXPERIENCE — emphasis travels down the stack over the chapter.
  *
- * The lattice recedes and the helix assembles in its place, then reverses on
- * the way out. Emphasis still travels down the strata underneath, so the
- * widening-responsibility reading survives.
+ * Not a literal map of employers: it reads as widening system responsibility,
+ * from interface work down to services and data.
  */
 export class ExperienceChapter extends StatelessChapter {
   readonly id = 'experience' as const;
 
   update(progress: number, input: SceneInput): ChapterState {
     const state = base();
-
-    // Assemble over the first third and hold; smoothstep so it does not read
-    // as a mechanical wipe.
-    const t = Math.min(1, progress / 0.32);
-    state.helix = t * t * (3 - 2 * t);
-
-    // Framed on the helix, which sits at the graph's centre in the clear
-    // right-hand half of the viewport.
-    const centre = 3.4 * state.helix;
-    state.camera.z = lerp(14.6, 13.4, progress);
-    state.camera.x = centre + lerp(-0.7, 0.7, progress) + input.pointer.x * 0.3;
-    state.camera.y = lerp(0.9, -0.7, progress);
-    state.target.x = centre;
-    state.target.y = lerp(0.5, -0.5, progress);
+    state.camera.z = lerp(14.4, 13.2, progress);
+    state.camera.x = lerp(-1.4, 1.4, progress) + input.pointer.x * 0.35;
+    state.camera.y = lerp(1.5, -1.2, progress);
+    state.target.y = lerp(1.1, -1.1, progress);
 
     // A soft band of emphasis sweeping through the strata.
     const head = progress * (STRATA_ORDER.length - 1);
@@ -86,8 +74,6 @@ export class ExperienceChapter extends StatelessChapter {
     });
 
     state.flow = 0.9;
-    // The perimeter frames the lattice, not the helix.
-    state.ambient = lerp(1, 0.4, state.helix);
     return state;
   }
 }

@@ -180,7 +180,6 @@ export function createEngine(options: EngineOptions): SceneEngine {
         highlightedAnchor: input.highlightedAnchor,
         highlightedStratum: input.highlightedStratum,
         emphasisedNodes: scene.emphasisedNodeCount,
-        helix: Number(scene.helixReveal.toFixed(3)),
         bounds: scene.bounds,
       };
     },
