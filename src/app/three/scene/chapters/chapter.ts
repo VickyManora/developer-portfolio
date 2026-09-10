@@ -14,6 +14,14 @@ export interface ChapterState {
   readonly flow: number;
   /** 0..1 multiplier on perimeter and grid presence. */
   readonly ambient: number;
+  /**
+   * 0..1 reveal of the double helix.
+   *
+   * The helix is its own geometry rather than a re-layout of the graph — see
+   * helix-strand.ts for why. As it reveals, the lattice recedes, so the two
+   * read as one system resolving into another form rather than as two scenes.
+   */
+  readonly helix: number;
 }
 
 /**
@@ -45,6 +53,7 @@ export interface MutableChapterState {
   anchors: Map<string, number>;
   flow: number;
   ambient: number;
+  helix: number;
 }
 
 /**
@@ -80,5 +89,6 @@ export function emptyState(): ChapterState {
     anchors: new Map(),
     flow: 1,
     ambient: 1,
+    helix: 0,
   };
 }

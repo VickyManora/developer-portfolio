@@ -73,6 +73,8 @@ export interface SceneReport {
   readonly highlightedAnchor: string | null;
   readonly highlightedStratum: StratumId | null;
   readonly emphasisedNodes: number;
+  /** 0..1 reveal of the Experience-chapter double helix. */
+  readonly helix: number;
   /** World-space extents of the graph, for composition verification. */
   readonly bounds: { x: [number, number]; y: [number, number] };
 }

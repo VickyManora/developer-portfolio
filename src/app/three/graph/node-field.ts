@@ -26,6 +26,9 @@ export class NodeField {
   private readonly targetIntensity: Float32Array;
   private readonly currentIntensity: Float32Array;
   private readonly baseColour: Color[] = [];
+  /** 0 = full lattice, 1 = fully receded behind the helix. */
+  private recede = 0;
+  private lastRecede = -1;
 
   constructor(private readonly graph: SystemGraph) {
     const count = graph.nodes.length;
@@ -77,6 +80,10 @@ export class NodeField {
     this.targetIntensity.fill(0);
   }
 
+  setRecede(value: number): void {
+    this.recede = value;
+  }
+
   /**
    * Eases current toward target and writes colour/scale.
    *
@@ -88,15 +95,22 @@ export class NodeField {
     let dirtyColour = false;
     let dirtyMatrix = false;
 
+    // While the recede is moving every instance needs its matrix rewritten;
+    // once it settles, only the ones whose emphasis changed do.
+    const recedeMoved = Math.abs(this.recede - this.lastRecede) > 0.0008;
+    if (recedeMoved) this.lastRecede = this.recede;
+
     for (let i = 0; i < this.currentIntensity.length; i++) {
       const target = this.targetIntensity[i];
       const current = this.currentIntensity[i];
-      if (Math.abs(target - current) < 0.002) {
+      const stable = Math.abs(target - current) < 0.002;
+
+      if (stable && !recedeMoved) {
         if (current !== target) this.currentIntensity[i] = target;
         continue;
       }
 
-      const next = current + (target - current) * ease;
+      const next = stable ? target : current + (target - current) * ease;
       this.currentIntensity[i] = next;
 
       const accent = highlightWarm.has(i) ? SCENE_PALETTE.nodeHighlight : SCENE_PALETTE.nodeActive;
@@ -106,7 +120,7 @@ export class NodeField {
 
       const node = this.graph.nodes[i];
       this.dummy.position.set(node.x, node.y, node.z);
-      this.dummy.scale.setScalar(this.baseScale[i] * (1 + next * 0.55));
+      this.dummy.scale.setScalar(this.baseScale[i] * (1 + next * 0.55) * (1 - this.recede * 0.78));
       this.dummy.rotation.set(node.x, node.y, node.z);
       this.dummy.updateMatrix();
       this.mesh.setMatrixAt(i, this.dummy.matrix);

@@ -5,6 +5,7 @@ import { EdgeField } from '../graph/edge-field';
 import { FlowField } from '../graph/flow-field';
 import { GroundGrid } from '../graph/ground-grid';
 import { Perimeter } from '../graph/perimeter';
+import { HelixStrand } from '../graph/helix-strand';
 import { SCENE_PALETTE } from '../config/palette';
 import { QUALITY_PRESETS, type QualityPreset } from '../config/quality-presets';
 import type { ChapterId, GraphSpec, SceneInput, StratumId } from '../types/scene-contract';
@@ -28,6 +29,10 @@ export class SystemCoreScene {
   private readonly flow: FlowField | null;
   private readonly grid: GroundGrid | null;
   private readonly perimeter: Perimeter | null;
+  private readonly helix: HelixStrand;
+
+  /** Eased helix reveal. Chapters stay stateless; the scene owns the easing. */
+  private helixAmount = 0;
 
   private readonly chapters = new Map<ChapterId, SceneChapter>();
   private activeChapter: ChapterId = 'hero';
@@ -66,6 +71,17 @@ export class SystemCoreScene {
     this.perimeter = preset.perimeter ? new Perimeter() : null;
     if (this.perimeter) this.root.add(this.perimeter.lines);
 
+    // One draw call, generated geometry, hidden until the Experience chapter.
+    // Lighter on constrained devices, present on all of them: it is the
+    // chapter's whole point, not an embellishment.
+    this.helix = new HelixStrand(
+      preset.nodeBudget > 120
+        ? { segments: 240, radialSegments: 6, rungs: 26 }
+        : { segments: 130, radialSegments: 5, rungs: 18 },
+    );
+    this.helix.setFogDensity(preset.fogDensity);
+    this.root.add(this.helix.mesh);
+
     // A fixed, slight three-quarter tilt. The scene never rotates at runtime;
     // the camera moves instead, which keeps the architecture legible.
     //
@@ -95,6 +111,11 @@ export class SystemCoreScene {
       x: [Math.min(...xs), Math.max(...xs)],
       y: [Math.min(...ys), Math.max(...ys)],
     };
+  }
+
+  /** Current eased helix reveal. Telemetry only. */
+  get helixReveal(): number {
+    return this.helixAmount;
   }
 
   /** Number of nodes currently carrying emphasis. Telemetry only. */
@@ -184,6 +205,21 @@ export class SystemCoreScene {
     }
     this.grid?.setOpacity(state.ambient);
     this.perimeter?.update(input.reducedMotion ? 0 : elapsed, state.ambient);
+
+    // --- Helix --------------------------------------------------------------
+    // Eased here so leaving the chapter mid-reveal unwinds smoothly.
+    // `immediate` snaps to the target, which is what the reduced-motion still
+    // frame needs — it must never be captured half-assembled.
+    this.helixAmount = immediate
+      ? state.helix
+      : this.helixAmount + (state.helix - this.helixAmount) * (1 - Math.exp(-delta * 3.4));
+    if (this.helixAmount < 0.0015) this.helixAmount = 0;
+
+    this.helix.setReveal(this.helixAmount);
+    if (!input.reducedMotion) this.helix.advance(elapsed);
+    this.nodes.setRecede(this.helixAmount);
+    this.edges.setRecede(this.helixAmount);
+    this.flow?.setRecede(this.helixAmount);
   }
 
   dispose(): void {
@@ -195,6 +231,7 @@ export class SystemCoreScene {
     this.flow?.dispose();
     this.grid?.dispose();
     this.perimeter?.dispose();
+    this.helix.dispose();
 
     this.root.clear();
     this.scene.clear();
