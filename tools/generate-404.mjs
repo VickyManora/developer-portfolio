@@ -31,6 +31,34 @@ html = html.replace(
   '<title>Page not found — Vicky Manora</title>',
 );
 
+// The CSR shell is rendered before any route runs, so SeoService never touched
+// it and it carries no Open Graph tags. A mistyped or stale link pasted into a
+// chat would then unfurl as bare text. The image tags are lifted verbatim from
+// the prerendered homepage — one source of truth for the card and its origin —
+// while the title and description are replaced with the 404 wording, and
+// og:url is deliberately not carried over: this page is not the homepage.
+const home = join(outDir, 'index.html');
+const imageTags = existsSync(home)
+  ? (readFileSync(home, 'utf8').match(
+      /<meta[^>]+(?:property="og:(?:image|image:[a-z_]+|site_name)"|name="twitter:(?:card|image|image:alt)")[^>]*>/g,
+    ) ?? [])
+  : [];
+
+if (imageTags.length) {
+  html = html.replace(
+    '</head>',
+    [
+      '<meta property="og:type" content="website">',
+      '<meta property="og:title" content="Page not found — Vicky Manora">',
+      '<meta property="og:description" content="That address does not exist on this site.">',
+      '<meta name="twitter:title" content="Page not found — Vicky Manora">',
+      '<meta name="twitter:description" content="That address does not exist on this site.">',
+      ...imageTags,
+      '</head>',
+    ].join(''),
+  );
+}
+
 html = html.replace(
   '<app-root></app-root>',
   `<app-root><div style="max-width:720px;margin:0 auto;padding:22vh 24px 0;font-family:system-ui,sans-serif;color:#EDEFF3">

@@ -2,7 +2,13 @@ import { DOCUMENT } from '@angular/common';
 import { inject, Injectable } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
-import { SITE_NAME } from '../../content/seo.data';
+import {
+  OG_IMAGE_ALT,
+  OG_IMAGE_HEIGHT,
+  OG_IMAGE_TYPE,
+  OG_IMAGE_WIDTH,
+  SITE_NAME,
+} from '../../content/seo.data';
 import type { SeoMeta } from '../models/content.models';
 
 /**
@@ -49,14 +55,19 @@ export class SeoService {
     this.meta.updateTag({ property: 'og:url', content: absolute });
 
     if (seo.ogImage) {
-      this.meta.updateTag({
-        property: 'og:image',
-        content: `${environment.siteUrl}${seo.ogImage}`,
-      });
-      this.meta.updateTag({
-        name: 'twitter:image',
-        content: `${environment.siteUrl}${seo.ogImage}`,
-      });
+      const image = `${environment.siteUrl}${seo.ogImage}`;
+
+      this.meta.updateTag({ property: 'og:image', content: image });
+      // Some crawlers (LinkedIn among them) still read the pre-2015 secure_url
+      // variant, and skip the card when only `og:image` is present.
+      this.meta.updateTag({ property: 'og:image:secure_url', content: image });
+      this.meta.updateTag({ property: 'og:image:type', content: OG_IMAGE_TYPE });
+      this.meta.updateTag({ property: 'og:image:width', content: OG_IMAGE_WIDTH });
+      this.meta.updateTag({ property: 'og:image:height', content: OG_IMAGE_HEIGHT });
+      this.meta.updateTag({ property: 'og:image:alt', content: OG_IMAGE_ALT });
+
+      this.meta.updateTag({ name: 'twitter:image', content: image });
+      this.meta.updateTag({ name: 'twitter:image:alt', content: OG_IMAGE_ALT });
     }
   }
 

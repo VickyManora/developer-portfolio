@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Vicky Manora">
+  <defs>
+    <linearGradient id="g" x1="15" y1="16" x2="49" y2="50" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4d8dff"/>
+      <stop offset="1" stop-color="#5ee9d0"/>
+    </linearGradient>
+  </defs>
+  <!-- Ground tile: the mark always sits on its intended dark ground, so it
+       reads the same against a light or a dark browser tab strip. -->
+  <rect width="64" height="64" rx="14" fill="#0d1017"/>
+  <!-- The V is a path through the system-core lattice: two edges meeting at a
+       node. The dots sit only fractionally proud of the stroke, so at 16px
+       they merge into it and the mark reads as a plain bold V — which is the
+       point. The lattice reading is a reward for looking closer. -->
+  <g stroke="url(#g)" fill="url(#g)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 18 L32 46 L48 18" fill="none" stroke-width="7.5"/>
+    <circle cx="16" cy="18" r="5.4"/>
+    <circle cx="48" cy="18" r="5.4"/>
+    <circle cx="32" cy="46" r="5.4"/>
+  </g>
+</svg>
